@@ -1,6 +1,6 @@
 # This file originates from SBTix
 { runCommand, fetchurl, lib, stdenv, jdk, jre, sbt, writeText, makeWrapper, gawk }:
-with stdenv.lib;
+with lib;
 
 let sbtTemplate = repoDefs: versioning:
     let
