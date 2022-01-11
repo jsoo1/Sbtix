@@ -1,2 +1,14 @@
-{ pkgs ? import <nixpkgs> {} }:
-pkgs.callPackage ./sbtix-tool.nix {}
+{ system ? builtins.currentSystem }:
+let
+  lock = builtins.fromJSON (builtins.readFile ./flake.lock);
+
+  flake-compat =
+    builtins.fetchTarball {
+      url = "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
+      sha256 = lock.nodes.flake-compat.locked.narHash;
+    };
+
+  flake = import flake-compat { src = ./.; };
+
+in
+flake.defaultNix.packages."${system}".sbtix-tool
